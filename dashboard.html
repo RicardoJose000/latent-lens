@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard - Latent Lens</title>
+<meta name="theme-color" content="#050811">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>try { if (!localStorage.getItem('ll_session')) location.replace('login.html'); } catch (e) { location.replace('login.html'); }</script>
+</head>
+<body>
+<div class="aurora"></div><div class="grain"></div>
+<nav class="nav" aria-label="Main">
+  <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" stroke="url(#bg1)" stroke-width="2"/><circle cx="16" cy="16" r="7" stroke="url(#bg1)" stroke-width="1.5" opacity=".7"/><circle cx="16" cy="16" r="2.6" fill="#22d3ee"/><path d="M5 16h4M23 16h4M16 5v4M16 23v4" stroke="#2dd4bf" stroke-width="1.5"/><defs><linearGradient id="bg1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs></svg>Latent Lens</a>
+  <div class="nav__links"><a href="dashboard.html">Overview</a><a href="#history">History</a><a href="#inquiries">Inquiries</a><a href="checker.html">New check</a></div>
+  <div class="nav__cta"><span class="user-pill"><span class="avatar" id="avatar">?</span></span><button class="btn btn--ghost btn--sm" id="signOut">Sign out</button></div>
+  <button class="nav__burger" aria-label="Menu"><span></span><span></span></button>
+</nav>
+
+<main class="wrap dash">
+  <div class="dash__head">
+    <div style="display:grid;gap:10px"><span class="eyebrow">Workspace</span><h1 class="h-lg" id="hello" data-split data-now>Overview</h1></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn--ghost" id="seedBtn">Load sample runs</button><a class="btn btn--primary" href="checker.html">New evaluation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a></div>
+  </div>
+
+  <div class="kpis" data-stagger>
+    <div class="kpi card"><span>Evaluations</span><strong id="k-runs">0</strong><em id="k-runs-d" style="color:var(--muted)">all time</em><svg id="s-runs" viewBox="0 0 100 40" preserveAspectRatio="none"></svg></div>
+    <div class="kpi card"><span>Avg. overall score</span><strong id="k-score">-</strong><em id="k-score-d"></em><svg id="s-score" viewBox="0 0 100 40" preserveAspectRatio="none"></svg></div>
+    <div class="kpi card"><span>Hallucination rate</span><strong id="k-hall">-</strong><em id="k-hall-d"></em><svg id="s-hall" viewBox="0 0 100 40" preserveAspectRatio="none"></svg></div>
+    <div class="kpi card"><span>Instruction breaches</span><strong id="k-breach">-</strong><em style="color:var(--muted)">runs with a failed constraint</em><svg id="s-breach" viewBox="0 0 100 40" preserveAspectRatio="none"></svg></div>
+  </div>
+
+  <div class="dash__grid" data-stagger>
+    <div class="panel card"><h4>Quality trend <span class="chip chip--info">overall score per run</span></h4><svg class="chart" id="trend" viewBox="0 0 700 380"></svg></div>
+    <div class="panel card"><h4>Failure taxonomy <span class="chip" id="taxTotal">0</span></h4><div class="bars" id="taxonomy"></div></div>
+  </div>
+
+  <div class="panel card" id="history" style="margin-bottom:14px" data-reveal>
+    <h4>Evaluation history <input class="input" id="search" placeholder="Search prompts..." style="max-width:260px;padding:9px 13px;font-size:13.5px"></h4>
+    <div class="table-wrap"><table class="table"><thead><tr><th>When</th><th>Prompt</th><th>Mode</th><th>Overall</th><th>Faith.</th><th>Adher.</th><th>Verdict</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+  </div>
+
+  <div class="panel card" id="inquiries" data-reveal>
+    <h4>Inquiry pipeline <span class="chip" id="inqCount">0</span></h4>
+    <div class="table-wrap"><table class="table"><thead><tr><th>Ref</th><th>Contact</th><th>Company</th><th>Request</th><th>Volume</th><th>Status</th></tr></thead><tbody id="inqRows"></tbody></table></div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/main.js"></script>
+<script src="js/seed.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

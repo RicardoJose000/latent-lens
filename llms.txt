@@ -1,0 +1,15 @@
+# Latent Lens
+
+> Latent Lens is a B2B AI evaluation and quality intelligence platform. It tests LLM applications, RAG pipelines and AI agents for factual accuracy, hallucinations and instruction adherence, and returns a scored report with a failure taxonomy and remediation steps.
+
+## Product
+- [Free AI Response Checker](https://ricardojose000.github.io/latent-lens/checker.html): submit a prompt, an AI response and optional ground truth; get faithfulness, hallucination rate, instruction adherence and relevance scores.
+- [Sample report](https://ricardojose000.github.io/latent-lens/#report): an illustrative evaluation of a customer-support RAG answer.
+
+## How evaluation works
+- Responses are decomposed into atomic claims and grounded against the supplied context.
+- Instructions (length, format, language, exclusions, required items) are extracted from the prompt and verified one by one.
+- Judges only assign labels through a strict JSON schema; scores are computed in code, so runs are reproducible.
+
+## Services
+- [Quality audits and custom pilots](https://ricardojose000.github.io/latent-lens/#pilot)

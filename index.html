@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latent Lens - AI Evaluation & Quality Intelligence</title>
+<meta name="description" content="Latent Lens tests LLM apps, RAG pipelines and AI agents for factual accuracy, hallucinations and instruction adherence.">
+<meta name="theme-color" content="#050811">
+<!-- Preview build: kept out of search indexes so it never competes with the production domain. Production flips this to "index,follow". -->
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://ricardojose000.github.io/latent-lens/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Latent Lens">
+<meta property="og:url" content="https://ricardojose000.github.io/latent-lens/">
+<meta property="og:title" content="Latent Lens - AI Evaluation & Quality Intelligence">
+<meta property="og:description" content="Catch hallucinations, instruction breaches and drift before your users do.">
+<meta property="og:image" content="https://ricardojose000.github.io/latent-lens/assets/img/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Latent Lens - AI Evaluation & Quality Intelligence">
+<meta name="twitter:description" content="Catch hallucinations, instruction breaches and drift before your users do.">
+<meta name="twitter:image" content="https://ricardojose000.github.io/latent-lens/assets/img/og-cover.jpg">
+<link rel="sitemap" type="application/xml" href="sitemap.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": "#org", "name": "Latent Lens", "url": "https://ricardojose000.github.io/latent-lens/", "logo": "https://ricardojose000.github.io/latent-lens/assets/favicon.svg",
+      "description": "B2B AI evaluation and quality intelligence platform for LLM applications, RAG pipelines and AI agents." },
+    { "@type": "WebSite", "@id": "#site", "name": "Latent Lens", "url": "https://ricardojose000.github.io/latent-lens/", "publisher": { "@id": "#org" } },
+    { "@type": "SoftwareApplication", "name": "Latent Lens AI Response Checker", "applicationCategory": "DeveloperApplication", "operatingSystem": "Web",
+      "url": "https://ricardojose000.github.io/latent-lens/checker.html", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+      "featureList": ["Hallucination detection", "Claim-level faithfulness scoring", "Instruction adherence checks", "Failure taxonomy", "Remediation steps", "LLM-as-a-judge with structured outputs"],
+      "publisher": { "@id": "#org" } },
+    { "@type": "FAQPage", "mainEntity": [
+      { "@type": "Question", "name": "What is the difference between an AI chatbot and an AI evaluation platform?", "acceptedAnswer": { "@type": "Answer", "text": "A chatbot generates answers. An evaluation platform judges answers produced by another system, using an isolated judge, pinned rubric and model versions, schema-validated outputs and stored runs that can be reproduced and compared." } },
+      { "@type": "Question", "name": "How does Latent Lens detect hallucinations?", "acceptedAnswer": { "@type": "Answer", "text": "The response is split into atomic claims and each claim is checked against the supplied ground truth. Claims are labeled supported, partial, contradicted or unsupported, and failures such as numeric drift, fabricated entities and contradictions are classified with a remediation step." } },
+      { "@type": "Question", "name": "Do I need an OpenAI API key?", "acceptedAnswer": { "@type": "Answer", "text": "No. The deterministic evaluation engine runs without any key. An LLM judge can be added later through a provider-agnostic interface." } },
+      { "@type": "Question", "name": "How are evaluation scores calibrated?", "acceptedAnswer": { "@type": "Answer", "text": "Judges only assign labels through a strict JSON schema at temperature 0. Scores are computed in code from those labels and the rubric is tuned against a hand-labeled set until it agrees with human reviewers." } }
+    ] }
+  ]
+}
+</script>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+</head>
+<body>
+<div class="preloader" aria-hidden="true"><div class="preloader__iris"></div><div class="preloader__count">000</div><div class="preloader__label">Calibrating lens</div></div>
+<div class="aurora"></div><div class="grain"></div><div class="scroll-progress"></div>
+
+<nav class="nav" aria-label="Main">
+  <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" stroke="url(#bg1)" stroke-width="2"/><circle cx="16" cy="16" r="7" stroke="url(#bg1)" stroke-width="1.5" opacity=".7"/><circle cx="16" cy="16" r="2.6" fill="#22d3ee"/><path d="M5 16h4M23 16h4M16 5v4M16 23v4" stroke="#2dd4bf" stroke-width="1.5"/><defs><linearGradient id="bg1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs></svg>Latent Lens</a>
+  <div class="nav__links"><a href="#platform">Platform</a><a href="#pipeline">How it works</a><a href="#report">Sample report</a><a href="checker.html">Free checker</a><a href="#pilot">Pilots</a></div>
+  <div class="nav__cta" data-auth-slot><a class="btn btn--ghost btn--sm" href="login.html">Sign in</a><a class="btn btn--primary btn--sm" href="checker.html">Run a check</a></div>
+  <button class="nav__burger" aria-label="Menu"><span></span><span></span></button>
+</nav>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero__video"><video data-autoplay data-src="assets/video/hero-plexus.mp4" poster="assets/video/hero-plexus.jpg" muted loop playsinline crossorigin="anonymous"></video></div>
+  <canvas id="hero3d" aria-hidden="true"></canvas>
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <span class="eyebrow" data-reveal="1.4">AI evaluation &amp; quality intelligence</span>
+      <h1 class="h-xl" data-split data-now data-delay="1.45">See what your AI<br><span class="serif grad">really</span> said.</h1>
+      <p class="lead" data-reveal="1.7">Latent Lens tests LLM apps, RAG pipelines and AI agents for factual accuracy, hallucinations and instruction adherence, then tells your team exactly how to fix them.</p>
+      <div class="hero__actions" data-reveal="1.85">
+        <a class="btn btn--primary btn--lg" href="checker.html">Run a free check <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        <a class="btn btn--ghost btn--lg" href="#report">View sample report</a>
+      </div>
+      <div class="hero__meta" data-reveal="2">
+        <div><strong><span data-count="13">0</span></strong><span>FAILURE TYPES CLASSIFIED</span></div>
+        <div><strong><span data-count="100" data-suffix="%">0</span></strong><span>STRUCTURED OUTPUTS</span></div>
+        <div><strong>&lt;<span data-count="2" data-suffix="s">0</span></strong><span>HEURISTIC VERDICT</span></div>
+      </div>
+    </div>
+    <div class="hero__panel card" data-reveal="2.1" data-tilt="6">
+      <div class="hero__panel-head"><span class="chip chip--info"><span class="dot"></span>live verdict</span><span class="mono" style="font-size:12px;color:var(--dim)">run_7f3a</span></div>
+      <div class="row"><span>Faithfulness</span><b class="mono">40</b></div><div class="bar"><i class="bad" style="width:40%"></i></div>
+      <div class="row"><span>Instruction adherence</span><b class="mono">50</b></div><div class="bar"><i class="warn" style="width:50%"></i></div>
+      <div class="row"><span>Relevance</span><b class="mono">91</b></div><div class="bar"><i style="width:91%"></i></div>
+      <div class="hero__claim"><b>Numeric drift</b> &middot; "refund within <u>60 days</u>" vs source: 30 days</div>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"><i></i>SCROLL</div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true"><div class="marquee__track">
+  <span>Faithfulness</span><span>Hallucination detection</span><span>Instruction adherence</span><span>Failure taxonomy</span><span>LLM-as-a-judge</span><span>RAG grounding</span><span>Agent traces</span><span>Regression suites</span>
+  <span>Faithfulness</span><span>Hallucination detection</span><span>Instruction adherence</span><span>Failure taxonomy</span><span>LLM-as-a-judge</span><span>RAG grounding</span><span>Agent traces</span><span>Regression suites</span>
+</div></div>
+
+<!-- ============ STATEMENT (scroll-scrubbed words) ============ -->
+<section class="statement">
+  <div class="wrap">
+    <div class="statement__media" data-reveal><video data-autoplay data-src="assets/video/eye.mp4" poster="assets/video/eye.jpg" muted loop playsinline></video></div>
+    <span class="eyebrow" style="margin-bottom:28px">The problem</span>
+    <p class="statement__text" data-scrub>Your model sounds confident. That is the problem. A chatbot is built to produce answers. An evaluation platform is built to judge them, with fixed rubrics, separated judges and scores you can reproduce next week.</p>
+  </div>
+</section>
+
+<!-- ============ CHATBOT vs EVAL ============ -->
+<section class="wrap" style="padding-bottom:clamp(90px,12vw,160px)">
+  <div class="section-head section-head--split">
+    <h2 class="h-lg" data-split>Not a chatbot wrapper.<br><span class="serif grad">An instrument.</span></h2>
+    <p class="lead" data-reveal>The core architectural difference: a chatbot optimises the next reply. Latent Lens treats every response as evidence and runs it through a deterministic, versioned evaluation pipeline.</p>
+  </div>
+  <div class="versus" data-stagger>
+    <div class="versus__col versus__col--a">
+      <video data-autoplay data-src="assets/video/code-screens.mp4" poster="assets/video/code-screens.jpg" muted loop playsinline></video>
+      <span class="versus__tag">Chatbot</span>
+      <h3 class="h-md">Generates</h3>
+      <ul><li>One model writes and grades its own output</li><li>Stateful conversation, temperature &gt; 0</li><li>Free-text answers, nothing to compare</li><li>Success = the user stopped asking</li></ul>
+    </div>
+    <div class="versus__col versus__col--b">
+      <video data-autoplay data-src="assets/video/lens-glasses.mp4" poster="assets/video/lens-glasses.jpg" muted loop playsinline></video>
+      <span class="versus__tag">Latent Lens</span>
+      <h3 class="h-md">Measures</h3>
+      <ul><li>Judge is isolated from the generator</li><li>Pinned rubric + model version, temperature 0</li><li>Schema-validated JSON per claim and per instruction</li><li>Every run stored, diffable and re-runnable</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CAPABILITIES ============ -->
+<section class="wrap" id="platform" style="padding-bottom:clamp(90px,12vw,160px)">
+  <div class="section-head">
+    <span class="eyebrow">Platform</span>
+    <h2 class="h-lg" data-split>Six lenses on<br>every response.</h2>
+  </div>
+  <div class="caps" data-stagger>
+    <article class="cap" data-tilt="5">
+      <div class="cap__media"><video data-autoplay data-src="assets/video/dataflow.mp4" poster="assets/video/dataflow.jpg" muted loop playsinline></video></div>
+      <span class="cap__num">01 / FAITHFULNESS</span><span class="cap__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
+      <h3>Claim-level grounding</h3><p>Responses are split into atomic claims. Each one is checked against your ground truth and labeled supported, partial, contradicted or unsupported, with the exact evidence quoted.</p>
+    </article>
+    <article class="cap" data-tilt="5">
+      <div class="cap__media"><img src="assets/img/lens-energy.jpg" alt="" loading="lazy"></div>
+      <span class="cap__num">02 / HALLUCINATIONS</span><span class="cap__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg></span>
+      <h3>Drift &amp; fabrication</h3><p>Numeric drift, invented entities and flipped polarity are caught and classified, not just flagged.</p>
+    </article>
+    <article class="cap" data-tilt="5">
+      <div class="cap__media"><img src="assets/img/monolith.jpg" alt="" loading="lazy"></div>
+      <span class="cap__num">03 / INSTRUCTIONS</span><span class="cap__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></span>
+      <h3>Instruction adherence</h3><p>Length, format, language, exclusions and required items are extracted from the prompt and verified one by one.</p>
+    </article>
+    <article class="cap" data-tilt="5">
+      <div class="cap__media"><video data-autoplay data-src="assets/video/servers.mp4" poster="assets/video/servers.jpg" muted loop playsinline></video></div>
+      <span class="cap__num">04 / LLM-AS-A-JUDGE</span><span class="cap__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M5 7h14M5 7l-3 6a3 3 0 006 0zM19 7l-3 6a3 3 0 006 0z"/></svg></span>
+      <h3>Structured judges, calibrated scores</h3><p>The judge model only labels items through a strict JSON schema. Scores are computed in code from those labels, so a run is reproducible and the rubric can be audited against human labels.</p>
+    </article>
+    <article class="cap" data-tilt="5">
+      <div class="cap__media"><img src="assets/img/art-latent-square.jpg" alt="" loading="lazy"></div>
+      <span class="cap__num">05 / TAXONOMY</span><span class="cap__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+      <h3>Failure taxonomy</h3><p>Every defect is mapped to a type and a severity, so you can see which kinds of failure are growing across releases.</p>
+    </article>
+    <article class="cap" data-tilt="5">
+      <div class="cap__media"><img src="assets/img/glass-wave.jpg" alt="" loading="lazy"></div>
+      <span class="cap__num">06 / REMEDIATION</span><span class="cap__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 005.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span>
+      <h3>Actionable fixes</h3><p>Each failure type comes with a concrete remediation step your engineers can ship: a prompt change, a retrieval fix or a post-generation guard.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PIPELINE (pinned horizontal film) ============ -->
+<section class="pipeline" id="pipeline">
+  <div class="wrap pipeline__intro section-head section-head--split">
+    <div><span class="eyebrow">How it works</span><h2 class="h-lg" data-split style="margin-top:18px">Five frames.<br><span class="serif grad">One verdict.</span></h2></div>
+    <p class="lead" data-reveal>Each evaluation is an async job: queued, processed by workers, persisted in Postgres and streamed back to the dashboard.</p>
+  </div>
+  <div class="pipeline__pin">
+    <div class="pipeline__track">
+      <article class="frame"><div class="frame__sprockets frame__sprockets--t"></div><video data-autoplay data-src="assets/video/plexus-waves.mp4" poster="assets/video/plexus-waves.jpg" muted loop playsinline></video>
+        <div class="frame__inner"><div class="frame__step"><b>01</b>INGEST</div><div><h3>Prompt, response, ground truth.</h3><p>Submitted from the UI or API. Validated, hashed and queued as an evaluation job.</p><code>POST /v1/evaluations
+{ prompt, response, context? }
+-&gt; 202 { id, status: "queued" }</code></div></div><div class="frame__sprockets frame__sprockets--b"></div></article>
+      <article class="frame"><div class="frame__sprockets frame__sprockets--t"></div><video data-autoplay data-src="assets/video/code-screens.mp4" poster="assets/video/code-screens.jpg" muted loop playsinline></video>
+        <div class="frame__inner"><div class="frame__step"><b>02</b>DECOMPOSE</div><div><h3>Claims and constraints.</h3><p>The response is split into atomic claims. Explicit instructions are extracted from the prompt.</p><code>claims: 5   constraints: 2
+"refund within 60 days"
+"avoid: store credit"</code></div></div><div class="frame__sprockets frame__sprockets--b"></div></article>
+      <article class="frame"><div class="frame__sprockets frame__sprockets--t"></div><video data-autoplay data-src="assets/video/lens-glasses.mp4" poster="assets/video/lens-glasses.jpg" muted loop playsinline></video>
+        <div class="frame__inner"><div class="frame__step"><b>03</b>JUDGE</div><div><h3>Heuristics + LLM judge.</h3><p>Deterministic checks run first. An isolated judge labels the rest through a strict JSON schema.</p><code>label: "contradicted"
+evidence: "...within 30 days..."
+failure: "Numeric drift"</code></div></div><div class="frame__sprockets frame__sprockets--b"></div></article>
+      <article class="frame"><div class="frame__sprockets frame__sprockets--t"></div><video data-autoplay data-src="assets/video/circuit.mp4" poster="assets/video/circuit.jpg" muted loop playsinline></video>
+        <div class="frame__inner"><div class="frame__step"><b>04</b>CALIBRATE</div><div><h3>Scores computed in code.</h3><p>Rubric weights are tuned against a hand-labeled set. When the judge disagrees with humans, we fix the rubric, not the score.</p><code>faithfulness = (sup + .5*partial) / n
+rubric: ll-rubric-0.4  temp: 0</code></div></div><div class="frame__sprockets frame__sprockets--b"></div></article>
+      <article class="frame"><div class="frame__sprockets frame__sprockets--t"></div><video data-autoplay data-src="assets/video/dashboard.mp4" poster="assets/video/dashboard.jpg" muted loop playsinline></video>
+        <div class="frame__inner"><div class="frame__step"><b>05</b>REPORT</div><div><h3>Verdict, taxonomy, fixes.</h3><p>Stored per user, comparable across runs and exportable as JSON for CI regression gates.</p><code>overall: 51  verdict: "High risk"
+failures: 4  remediation: 4</code></div></div><div class="frame__sprockets frame__sprockets--b"></div></article>
+    </div>
+    <div class="pipeline__progress"><i></i></div>
+  </div>
+</section>
+
+<!-- ============ SAMPLE REPORT ============ -->
+<section class="wrap pad" id="report">
+  <div class="section-head section-head--split">
+    <div><span class="eyebrow">Illustrative sample report</span><h2 class="h-lg" data-split style="margin-top:18px">A refund bot,<br><span class="serif grad">under the lens.</span></h2></div>
+    <p class="lead" data-reveal>Generated by the real engine on the "RAG answer with drift" sample. Hover the highlighted claims, or switch tabs to see the structured output your CI pipeline would consume.</p>
+  </div>
+  <div class="report" id="sampleReport" data-reveal>
+    <aside class="report__side card">
+      <div class="gauge"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" fill="none" stroke="rgba(148,178,214,.1)" stroke-width="12"/><circle class="gauge__arc" cx="100" cy="100" r="86" fill="none" stroke="url(#gg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="540.35" stroke-dashoffset="540.35"/><defs><linearGradient id="gg"><stop stop-color="#fb7185"/><stop offset="1" stop-color="#fbbf24"/></linearGradient></defs></svg>
+        <div class="gauge__val"><div><strong data-k="overall">0</strong><br><span>OVERALL</span></div></div></div>
+      <div style="text-align:center"><span class="chip chip--bad" data-k="verdict">High risk</span></div>
+      <div class="metric"><div class="metric__row"><span>Faithfulness</span><b data-k="faithfulness">-</b></div><div class="meter"><i data-m="faithfulness"></i></div></div>
+      <div class="metric"><div class="metric__row"><span>Hallucination rate</span><b data-k="hallucination_rate">-</b></div><div class="meter"><i class="bad" data-m="hallucination_rate"></i></div></div>
+      <div class="metric"><div class="metric__row"><span>Instruction adherence</span><b data-k="instruction_adherence">-</b></div><div class="meter"><i class="warn" data-m="instruction_adherence"></i></div></div>
+      <div class="metric"><div class="metric__row"><span>Relevance</span><b data-k="relevance">-</b></div><div class="meter"><i data-m="relevance"></i></div></div>
+    </aside>
+    <div class="report__main card">
+      <div class="report__tabs" role="tablist"><button class="is-active" data-tab="claims">Claims</button><button data-tab="failures">Failures &amp; fixes</button><button data-tab="json">Structured output</button></div>
+      <div class="tabpane is-active" data-pane="claims">
+        <div class="legend"><span class="chip chip--ok">supported</span><span class="chip chip--warn">partial</span><span class="chip chip--bad">contradicted / unsupported</span></div>
+        <div class="claimtext" id="sampleClaims"></div>
+        <div class="meta-line" id="sampleMeta"></div>
+      </div>
+      <div class="tabpane" data-pane="failures"><div class="findings" id="sampleFindings"></div></div>
+      <div class="tabpane" data-pane="json"><pre class="json" id="sampleJson"></pre></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CINEMATIC REVEAL ============ -->
+<section class="cinema" aria-label="Trust is measured">
+  <div class="cinema__sticky cinema__bars">
+    <div class="cinema__media"><video data-autoplay data-src="assets/video/vortex.mp4" poster="assets/video/vortex.jpg" muted loop playsinline></video></div>
+    <div class="cinema__hud"><span class="tl"><span class="rec"></span>REC  LL-CAM 01</span><span class="tr">ISO 800  f/1.4</span><span class="bl">RUBRIC ll-0.4</span><span class="br" id="tc">00:00:00:00</span></div>
+    <div class="cinema__text"><h2 class="h-xl">Trust is <span class="serif grad">measured</span>,<br>not assumed.</h2></div>
+  </div>
+</section>
+
+<!-- ============ ARCHITECTURE ============ -->
+<section class="wrap pad" id="architecture">
+  <div class="section-head section-head--split">
+    <div><span class="eyebrow">MVP architecture</span><h2 class="h-lg" data-split style="margin-top:18px">Built like<br><span class="serif grad">infrastructure.</span></h2></div>
+    <p class="lead" data-reveal>Next.js front end, FastAPI evaluation service with an async worker queue, Supabase for auth and Postgres. Judges are swappable behind one interface.</p>
+  </div>
+  <div class="card arch" data-reveal>
+    <svg viewBox="0 0 1100 300" fill="none" font-family="JetBrains Mono, monospace" font-size="13">
+      <defs><linearGradient id="ag" x1="0" x2="1"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs>
+      <g stroke="rgba(148,178,214,.25)"><rect x="20" y="110" width="170" height="80" rx="14" fill="rgba(5,8,17,.6)"/><rect x="250" y="110" width="170" height="80" rx="14" fill="rgba(5,8,17,.6)"/><rect x="480" y="30" width="170" height="80" rx="14" fill="rgba(5,8,17,.6)"/><rect x="480" y="190" width="170" height="80" rx="14" fill="rgba(5,8,17,.6)"/><rect x="710" y="110" width="170" height="80" rx="14" fill="rgba(5,8,17,.6)" stroke="url(#ag)"/><rect x="920" y="110" width="160" height="80" rx="14" fill="rgba(5,8,17,.6)"/></g>
+      <g fill="#e7f2ff" font-weight="500"><text x="105" y="146" text-anchor="middle">Next.js app</text><text x="335" y="146" text-anchor="middle">FastAPI</text><text x="565" y="66" text-anchor="middle">Supabase Auth</text><text x="565" y="226" text-anchor="middle">Job queue</text><text x="795" y="146" text-anchor="middle">Eval workers</text><text x="1000" y="146" text-anchor="middle">Postgres</text></g>
+      <g fill="#8a9ab3" font-size="11"><text x="105" y="166" text-anchor="middle">TS + Tailwind</text><text x="335" y="166" text-anchor="middle">/v1/evaluations</text><text x="565" y="86" text-anchor="middle">JWT / RLS</text><text x="565" y="246" text-anchor="middle">Redis / arq</text><text x="795" y="166" text-anchor="middle">heuristics + judge</text><text x="1000" y="166" text-anchor="middle">runs, claims, inquiries</text></g>
+      <g stroke="url(#ag)" stroke-width="1.6" class="flow"><path d="M190 150h60"/><path d="M420 140 C450 140 450 70 480 70"/><path d="M420 160 C450 160 450 230 480 230"/><path d="M650 230 C680 230 680 160 710 160"/><path d="M880 150h40"/></g>
+    </svg>
+    <div class="stack">
+      <div><b>Frontend</b><span>Next.js 15, TypeScript, Tailwind, server actions</span></div>
+      <div><b>Evaluation API</b><span>FastAPI, Pydantic schemas, async workers</span></div>
+      <div><b>Data &amp; auth</b><span>Supabase Postgres + Auth, row-level security</span></div>
+      <div><b>Judges</b><span>OpenAI Structured Outputs, swappable providers</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section class="wrap" style="padding-bottom:clamp(90px,12vw,160px)">
+  <div class="gallery" data-stagger>
+    <figure><video data-autoplay data-src="assets/video/engineer.mp4" poster="assets/video/engineer.jpg" muted loop playsinline data-parallax="6"></video><figcaption>FOR ENGINEERING TEAMS</figcaption></figure>
+    <figure><img src="assets/img/art-latent-flow.jpg" alt="Generative latent-space artwork" loading="lazy" data-parallax="8"><figcaption>LATENT SPACE</figcaption></figure>
+    <figure><img src="assets/img/chip.jpg" alt="Processor close-up" loading="lazy" data-parallax="8"><figcaption>MODEL-AGNOSTIC</figcaption></figure>
+    <figure><video data-autoplay data-src="assets/video/plexus-stars.mp4" poster="assets/video/plexus-stars.jpg" muted loop playsinline data-parallax="6"></video><figcaption>RAG PIPELINES</figcaption></figure>
+    <figure><img src="assets/img/polyhedron.jpg" alt="Dark polyhedron render" loading="lazy" data-parallax="8"><figcaption>AI AGENTS</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ PLANS ============ -->
+<section class="wrap" id="pilot" style="padding-bottom:clamp(90px,12vw,160px)">
+  <div class="section-head" style="text-align:center;justify-items:center">
+    <span class="eyebrow">Engagements</span>
+    <h2 class="h-lg" data-split>Start free.<br><span class="serif grad">Scale with proof.</span></h2>
+  </div>
+  <div class="plans" data-stagger>
+    <div class="plan card"><h3>Response Checker</h3><div class="price">Free</div><ul><li>Single prompt / response checks</li><li>Faithfulness, adherence, relevance</li><li>Failure taxonomy + fixes</li><li>History in your dashboard</li></ul><a class="btn btn--ghost" href="checker.html">Open checker</a></div>
+    <div class="plan card plan--hot"><h3>Quality Audit</h3><div class="price">Fixed fee <small>/ audit</small></div><ul><li>Your real traffic sample (200-2,000 rows)</li><li>Custom rubric + human-labeled calibration set</li><li>Failure heatmap by intent and model</li><li>Written remediation plan</li></ul><a class="btn btn--primary" href="#inquiry">Request an audit</a></div>
+    <div class="plan card"><h3>Custom Pilot</h3><div class="price">Scoped <small>/ 4-6 wks</small></div><ul><li>Evaluation suite wired into your CI</li><li>RAG + agent trace evaluation</li><li>Regression gates per release</li><li>Private deployment option</li></ul><a class="btn btn--ghost" href="#inquiry">Discuss a pilot</a></div>
+  </div>
+</section>
+
+<!-- ============ INQUIRY ============ -->
+<section class="wrap" id="inquiry">
+  <div class="inquiry">
+    <div class="inquiry__media" data-reveal>
+      <video data-autoplay data-src="assets/video/engineer.mp4" poster="assets/video/engineer.jpg" muted loop playsinline></video>
+      <span class="eyebrow">Inquiry pipeline</span>
+      <h2 class="h-md">Tell us what you ship.<br>We'll show you where it breaks.</h2>
+      <p style="color:var(--muted);margin:0">Requests land in the admin inbox with status tracking. In this demo they are saved to the dashboard of this browser.</p>
+    </div>
+    <form class="form card" id="inquiryForm" novalidate data-reveal=".1">
+      <div class="field"><label for="iq-name">Full name</label><input class="input" id="iq-name" name="name" required autocomplete="name"></div>
+      <div class="field"><label for="iq-email">Work email</label><input class="input" id="iq-email" name="email" type="email" required autocomplete="email"></div>
+      <div class="field"><label for="iq-company">Company</label><input class="input" id="iq-company" name="company" required></div>
+      <div class="field"><label for="iq-volume">Monthly AI responses</label><select class="select" id="iq-volume" name="volume"><option>Under 10k</option><option>10k - 100k</option><option>100k - 1M</option><option>1M+</option></select></div>
+      <div class="field field--full"><label>What do you need?</label><div class="radios">
+        <label><input type="radio" name="type" value="Quality audit" checked><span>Quality audit</span></label>
+        <label><input type="radio" name="type" value="Custom pilot"><span>Custom pilot</span></label>
+        <label><input type="radio" name="type" value="RAG evaluation"><span>RAG evaluation</span></label>
+        <label><input type="radio" name="type" value="Agent evaluation"><span>Agent evaluation</span></label></div></div>
+      <div class="field field--full"><label for="iq-msg">Use case</label><textarea class="textarea" id="iq-msg" name="message" required placeholder="e.g. Support assistant on GPT-4o with a RAG layer over 3k help articles. We see wrong refund terms in roughly 1 in 20 answers."></textarea></div>
+      <div class="form__foot"><span class="form__note">We reply within one business day.</span><button class="btn btn--primary" type="submit">Send request <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button></div>
+      <div class="success" id="inquiryOk" role="status"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FAQ (mirrors the FAQPage structured data) ============ -->
+<section class="wrap" id="faq" style="padding-top:clamp(90px,12vw,160px)">
+  <div class="section-head section-head--split">
+    <div><span class="eyebrow">FAQ</span><h2 class="h-lg" data-split style="margin-top:18px">Straight<br><span class="serif grad">answers.</span></h2></div>
+    <p class="lead" data-reveal>Written to be quoted. Every answer here is also published as structured data for search engines and AI assistants.</p>
+  </div>
+  <div class="faq" data-stagger>
+    <details class="card" open><summary>What is the difference between an AI chatbot and an AI evaluation platform?</summary><p>A chatbot generates answers. An evaluation platform judges answers produced by another system, using an isolated judge, pinned rubric and model versions, schema-validated outputs and stored runs that can be reproduced and compared.</p></details>
+    <details class="card"><summary>How does Latent Lens detect hallucinations?</summary><p>The response is split into atomic claims and each claim is checked against the supplied ground truth. Claims are labeled supported, partial, contradicted or unsupported, and failures such as numeric drift, fabricated entities and contradictions are classified with a remediation step.</p></details>
+    <details class="card"><summary>Do I need an OpenAI API key?</summary><p>No. The deterministic evaluation engine runs without any key. An LLM judge can be added later through a provider-agnostic interface.</p></details>
+    <details class="card"><summary>How are evaluation scores calibrated?</summary><p>Judges only assign labels through a strict JSON schema at temperature 0. Scores are computed in code from those labels and the rubric is tuned against a hand-labeled set until it agrees with human reviewers.</p></details>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="wrap" style="padding-top:clamp(90px,12vw,160px)">
+  <div class="cta" data-reveal>
+    <img src="assets/img/art-lens-rings.jpg" alt="" loading="lazy" data-parallax="10">
+    <span class="eyebrow">Ready when you are</span>
+    <h2 class="h-lg" style="margin-top:18px" data-split>Put your AI<br><span class="serif grad">under the lens.</span></h2>
+    <div class="hero__actions"><a class="btn btn--primary btn--lg" href="checker.html">Run a free check</a><a class="btn btn--ghost btn--lg" href="login.html">Create account</a></div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div><a class="brand" href="index.html" style="display:flex;padding:0;color:var(--text)">Latent Lens</a><p style="color:var(--muted);max-width:320px;font-size:14.5px">AI evaluation and quality intelligence for teams shipping LLM products.</p></div>
+      <div><h5>Product</h5><a href="checker.html">Response Checker</a><a href="dashboard.html">Dashboard</a><a href="#report">Sample report</a></div>
+      <div><h5>Company</h5><a href="#pilot">Audits &amp; pilots</a><a href="#inquiry">Contact</a><a href="#architecture">Architecture</a></div>
+      <div><h5>Account</h5><a href="login.html">Sign in</a><a href="login.html#signup">Create account</a></div>
+    </div>
+    <div class="footer__big" aria-hidden="true">LATENT LENS</div>
+    <div class="footer__bottom"><span>&copy; <span id="yr"></span> Latent Lens. MVP preview build.</span><span class="mono">rubric ll-rubric-0.4 &middot; engine heuristic-1.2</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/main.js"></script>
+<script src="js/report.js"></script>
+<script src="js/home.js"></script>
+<script type="module" src="js/hero3d.js"></script>
+</body>
+</html>

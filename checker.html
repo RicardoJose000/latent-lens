@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free AI Response Checker - Latent Lens</title>
+<meta name="description" content="Check any AI response for hallucinations, instruction breaches and grounding against your context.">
+<meta name="theme-color" content="#050811">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://ricardojose000.github.io/latent-lens/checker.html">
+<meta property="og:image" content="assets/img/og-cover.jpg">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="aurora"></div><div class="grain"></div><div class="scroll-progress"></div>
+
+<nav class="nav" aria-label="Main">
+  <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" stroke="url(#bg1)" stroke-width="2"/><circle cx="16" cy="16" r="7" stroke="url(#bg1)" stroke-width="1.5" opacity=".7"/><circle cx="16" cy="16" r="2.6" fill="#22d3ee"/><path d="M5 16h4M23 16h4M16 5v4M16 23v4" stroke="#2dd4bf" stroke-width="1.5"/><defs><linearGradient id="bg1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs></svg>Latent Lens</a>
+  <div class="nav__links"><a href="index.html#platform">Platform</a><a href="index.html#pipeline">How it works</a><a href="checker.html">Free checker</a><a href="dashboard.html">Dashboard</a></div>
+  <div class="nav__cta" data-auth-slot><a class="btn btn--ghost btn--sm" href="login.html">Sign in</a><a class="btn btn--primary btn--sm" href="login.html#signup">Create account</a></div>
+  <button class="nav__burger" aria-label="Menu"><span></span><span></span></button>
+</nav>
+
+<header class="app-hero">
+  <video data-autoplay data-src="assets/video/dataflow.mp4" poster="assets/video/dataflow.jpg" muted loop playsinline></video>
+  <div class="wrap" style="display:grid;gap:18px">
+    <span class="eyebrow" data-reveal>Free AI Response Checker</span>
+    <h1 class="h-lg" data-split data-now>Paste it in.<br><span class="serif grad">See what breaks.</span></h1>
+    <p class="lead" data-reveal=".15">Submit the original prompt, the AI response and optional ground truth. The engine decomposes claims, grounds them, checks every instruction and returns a scored report with fixes.</p>
+  </div>
+</header>
+
+<main class="wrap checker">
+  <form class="checker__form card" id="checkForm" data-reveal=".2">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <b style="font-size:15px">New evaluation</b>
+      <div class="presets" id="presets"><span class="mono" style="font-size:11.5px;color:var(--dim);align-self:center">TRY:</span></div>
+    </div>
+    <div class="field"><label for="f-prompt">Original prompt <span style="color:var(--red)">*</span></label><textarea class="textarea" id="f-prompt" required placeholder="The instruction your AI received, including any constraints (length, format, language, things to avoid)..."></textarea></div>
+    <div class="field"><label for="f-response">AI-generated response <span style="color:var(--red)">*</span></label><textarea class="textarea" id="f-response" required style="min-height:150px" placeholder="Paste the model output you want to audit..."></textarea><div class="counter" id="f-count">0 words</div></div>
+    <div class="field"><label for="f-context">Ground truth / retrieved context <span style="color:var(--dim)">(optional, enables faithfulness)</span></label><textarea class="textarea" id="f-context" placeholder="Source documents, RAG chunks or the known-correct answer..."></textarea></div>
+    <details class="judge">
+      <summary>LLM-as-a-judge (optional, uses your OpenAI key)</summary>
+      <div class="inner">
+        <p style="margin:0;font-size:13px;color:var(--muted)">Adds an OpenAI Structured Outputs judge on top of the deterministic engine. Your key is kept in this tab's session storage and is sent only to api.openai.com. In production the key lives server-side.</p>
+        <div class="field"><label for="f-key">OpenAI API key</label><input class="input" id="f-key" type="password" autocomplete="off" placeholder="sk-..."></div>
+        <div class="field"><label for="f-model">Judge model</label><input class="input" id="f-model" value="gpt-4o-mini"></div>
+      </div>
+    </details>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <button class="btn btn--ghost btn--sm" type="button" id="clearBtn">Clear</button>
+      <button class="btn btn--primary btn--lg" type="submit" id="runBtn">Run evaluation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+    </div>
+  </form>
+
+  <section class="checker__out" aria-live="polite">
+    <div class="empty card" id="emptyState" data-reveal=".3">
+      <img src="assets/img/art-lens-rings.jpg" alt="">
+      <span class="eyebrow">Awaiting input</span>
+      <h2 class="h-md">Your report appears here.</h2>
+      <p style="color:var(--muted);max-width:380px;margin:0">Pick a sample above to see a full run in one click, or paste your own prompt and response.</p>
+    </div>
+
+    <div class="scan card" id="scan">
+      <span class="eyebrow">Evaluating</span>
+      <div class="scan__step" data-s="0"><i></i>Validating input &amp; queuing job</div>
+      <div class="scan__step" data-s="1"><i></i>Extracting instructions from prompt</div>
+      <div class="scan__step" data-s="2"><i></i>Decomposing response into atomic claims</div>
+      <div class="scan__step" data-s="3"><i></i>Grounding claims against context</div>
+      <div class="scan__step" data-s="4"><i></i>Classifying failures &amp; computing scores</div>
+    </div>
+
+    <div class="result" id="result">
+      <div class="result__top card">
+        <div class="gauge"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" fill="none" stroke="rgba(148,178,214,.1)" stroke-width="12"/><circle class="gauge__arc" cx="100" cy="100" r="86" fill="none" stroke="url(#gc)" stroke-width="12" stroke-linecap="round" stroke-dasharray="540.35" stroke-dashoffset="540.35"/><defs><linearGradient id="gc"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#2dd4bf"/></linearGradient></defs></svg>
+          <div class="gauge__val"><div><strong data-k="overall">0</strong><br><span>OVERALL</span></div></div></div>
+        <div class="verdict">
+          <span class="chip" data-k="verdict">-</span>
+          <h3 id="verdictText">-</h3>
+          <div class="meta-line" id="metaLine"></div>
+          <div class="result__actions">
+            <button class="btn btn--ghost btn--sm" type="button" id="copyJson">Copy JSON</button>
+            <button class="btn btn--ghost btn--sm" type="button" id="dlJson">Download report</button>
+            <a class="btn btn--ghost btn--sm" href="dashboard.html">View history</a>
+          </div>
+        </div>
+      </div>
+      <div class="card block">
+        <h4>Scores</h4>
+        <div class="metrics-grid">
+          <div class="metric"><div class="metric__row"><span>Faithfulness</span><b data-k="faithfulness">-</b></div><div class="meter"><i data-m="faithfulness"></i></div></div>
+          <div class="metric"><div class="metric__row"><span>Hallucination rate</span><b data-k="hallucination_rate">-</b></div><div class="meter"><i class="bad" data-m="hallucination_rate"></i></div></div>
+          <div class="metric"><div class="metric__row"><span>Instruction adherence</span><b data-k="instruction_adherence">-</b></div><div class="meter"><i class="warn" data-m="instruction_adherence"></i></div></div>
+          <div class="metric"><div class="metric__row"><span>Relevance</span><b data-k="relevance">-</b></div><div class="meter"><i data-m="relevance"></i></div></div>
+        </div>
+      </div>
+      <div class="card block"><h4>Claims <span class="legend"><span class="chip chip--ok">supported</span><span class="chip chip--warn">partial</span><span class="chip chip--bad">failed</span></span></h4><div class="claimtext" id="claims"></div></div>
+      <div class="card block"><h4>Instructions</h4><div class="checklist" id="instructions"></div></div>
+      <div class="card block"><h4>Failures &amp; remediation</h4><div class="findings" id="findings"></div></div>
+      <div class="card block"><h4>Structured output</h4><pre class="json" id="json"></pre></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer" style="margin-top:40px"><div class="wrap footer__bottom"><span>&copy; Latent Lens. MVP preview build.</span><a href="index.html" style="color:var(--muted)">Back to home</a></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/main.js"></script>
+<script src="js/report.js"></script>
+<script src="js/checker.js"></script>
+</body>
+</html>
