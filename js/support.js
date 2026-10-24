@@ -21,9 +21,10 @@
     { q: 'Can I export results?', k: 'export download json csv ci pipeline integrate integration api', a: 'Each report can be copied or downloaded as structured JSON, the same format a CI regression gate would read.' },
     { q: 'Which models do you support?', k: 'models support gpt claude gemini llama mistral which provider', a: 'Latent Lens is model-agnostic. It judges the output, so it works with responses from any model or provider.' },
     { q: 'Is my data safe?', k: 'data privacy secure security safe store stored gdpr confidential', a: 'In production, data is stored in Postgres with row-level security so each account only sees its own runs. API keys stay on the server and are never exposed in the browser.' },
+    { q: 'Can a human expert review my results?', k: 'human expert review check properly person specialist look results report audit', a: 'Yes. Every report has a "Request expert review" button that sends the report to the team. An expert checks whether the problems are one-offs or patterns and tells you which fixes matter first. I can also pass your question to them right now.', handoff: true },
     { q: 'How do I contact the team?', k: 'contact team human person talk speak email support help', a: 'I can pass your question to the team right here, or you can use the inquiry form for audits and pilots.', handoff: true }
   ];
-  const STARTERS = [0, 1, 3, 5];
+  const STARTERS = [1, 12, 3, 5];
 
   const STOP = new Set('a an the and or of to in on at by for with is are was be do does did i you we my your it this that can how what which where who when me us our please about'.split(' '));
   const toks = (s) => (s.toLowerCase().match(/[a-z0-9]+/g) || []).filter((w) => !STOP.has(w) && w.length > 1).map((w) => w.replace(/(ing|ed|es|s)$/, ''));

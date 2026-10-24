@@ -100,6 +100,21 @@
       <div class="card block"><h4>Claims <span class="legend"><span class="chip chip--ok">supported</span><span class="chip chip--warn">partial</span><span class="chip chip--bad">failed</span></span></h4><div class="claimtext" id="claims"></div></div>
       <div class="card block"><h4>Instructions</h4><div class="checklist" id="instructions"></div></div>
       <div class="card block"><h4>Failures &amp; remediation</h4><div class="findings" id="findings"></div></div>
+      <div class="card expert" id="expert">
+        <img src="assets/img/lens-energy.jpg" alt="" loading="lazy">
+        <div class="expert__copy">
+          <span class="eyebrow">Human expert review</span>
+          <h3>Want a human expert to check this properly?</h3>
+          <p id="expertPitch"></p>
+        </div>
+        <form class="expert__form" id="expertForm" novalidate>
+          <input class="input" id="ex-name" placeholder="Your name" autocomplete="name" required>
+          <input class="input" id="ex-email" type="email" placeholder="Work email" autocomplete="email" required>
+          <button class="btn btn--primary" type="submit">Request expert review <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+          <span class="form__note">This report is attached automatically. Reply within one business day.</span>
+        </form>
+        <div class="success" id="expertOk" role="status"></div>
+      </div>
       <div class="card block"><h4>Structured output</h4><pre class="json" id="json"></pre></div>
     </div>
   </section>
