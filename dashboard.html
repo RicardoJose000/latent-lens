@@ -40,8 +40,11 @@
   </div>
 
   <div class="panel card" id="history" style="margin-bottom:14px" data-reveal>
-    <h4>Evaluation history <input class="input" id="search" placeholder="Search prompts..." style="max-width:260px;padding:9px 13px;font-size:13.5px"></h4>
-    <div class="table-wrap"><table class="table"><thead><tr><th>When</th><th>Prompt</th><th>Mode</th><th>Overall</th><th>Faith.</th><th>Adher.</th><th>Verdict</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+    <h4>Evaluation history
+      <span class="hist-tools"><input class="input" id="search" placeholder="Search prompts..." style="max-width:240px;padding:9px 13px;font-size:13.5px">
+      <button class="btn btn--ghost btn--sm" id="compareBtn" disabled>Compare 2 selected</button><button class="btn btn--ghost btn--sm" id="csvBtn">Export CSV</button></span></h4>
+    <div class="compare card" id="compare" hidden></div>
+    <div class="table-wrap"><table class="table"><thead><tr><th style="width:34px"></th><th>When</th><th>Prompt</th><th>Mode</th><th>Overall</th><th>Faith.</th><th>Adher.</th><th>Verdict</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
   </div>
 
   <div class="panel card" id="inquiries" data-reveal>

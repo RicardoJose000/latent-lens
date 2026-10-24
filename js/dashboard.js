@@ -60,6 +60,7 @@
     const q = $('search').value.trim().toLowerCase();
     const rows = list.filter((r) => !q || r.input.prompt.toLowerCase().includes(q) || r.input.response.toLowerCase().includes(q));
     $('rows').innerHTML = rows.length ? rows.map((r) => `<tr>
+      <td><input type="checkbox" class="pick" data-pick="${r.id}" aria-label="Select run for comparison"${picked.includes(r.id) ? ' checked' : ''}></td>
       <td class="mono" style="font-size:12.5px;color:var(--muted);white-space:nowrap">${ago(r.created_at)}</td>
       <td><div class="clip">${esc(r.input.prompt)}</div></td>
       <td><span class="chip">${r.mode === 'grounded' ? 'grounded' : 'ref-free'}</span></td>
@@ -68,7 +69,39 @@
       <td class="mono">${r.scores.instruction_adherence === null ? '<span style="color:var(--dim)">n/a</span>' : r.scores.instruction_adherence}</td>
       <td><span class="chip chip--${r.verdict.tone}">${r.verdict.label}</span></td>
       <td style="white-space:nowrap"><a class="btn btn--ghost btn--sm" href="checker.html#${r.id}">Open</a> <button class="btn btn--ghost btn--sm" data-del="${r.id}" aria-label="Delete run">&#10005;</button></td></tr>`).join('')
-      : `<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px">${q ? 'No runs match your search.' : 'No evaluations yet. <a href="checker.html" style="color:var(--cyan)">Run your first check</a> or load the sample runs.'}</td></tr>`;
+      : `<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:40px">${q ? 'No runs match your search.' : 'No evaluations yet. <a href="checker.html" style="color:var(--cyan)">Run your first check</a> or load the sample runs.'}</td></tr>`;
+  }
+
+  /* ---------- compare two runs: score deltas + which failure types appeared or were fixed ---------- */
+  let picked = [];
+  function compare() {
+    const list = runs.all();
+    const [a, b] = picked.map((id) => list.find((r) => r.id === id)).filter(Boolean).sort((x, y) => new Date(x.created_at) - new Date(y.created_at));
+    if (!a || !b) return;
+    const rowsHTML = [['Overall', 'overall', 1], ['Faithfulness', 'faithfulness', 1], ['Hallucination rate', 'hallucination_rate', -1], ['Instruction adherence', 'instruction_adherence', 1], ['Relevance', 'relevance', 1]].map(([label, k, dir]) => {
+      const va = a.scores[k], vb = b.scores[k];
+      const d = va === null || vb === null ? null : vb - va;
+      const good = d === null || d === 0 ? 'var(--muted)' : d * dir > 0 ? 'var(--green)' : 'var(--red)';
+      return `<tr><td>${label}</td><td class="mono">${va === null ? 'n/a' : va}</td><td class="mono">${vb === null ? 'n/a' : vb}</td><td class="mono" style="color:${good}">${d === null ? '-' : (d > 0 ? '+' : '') + d}</td></tr>`;
+    }).join('');
+    const ta = new Set(a.failures.map((f) => f.type)), tb = new Set(b.failures.map((f) => f.type));
+    const fixed = [...ta].filter((t) => !tb.has(t)), added = [...tb].filter((t) => !ta.has(t));
+    $('compare').innerHTML = `<div class="compare__head"><b>Run comparison</b><button class="btn btn--ghost btn--sm" id="closeCompare">Close</button></div>
+      <div class="compare__grid"><table class="table"><thead><tr><th>Metric</th><th>Earlier &middot; ${ago(a.created_at)}</th><th>Later &middot; ${ago(b.created_at)}</th><th>Change</th></tr></thead><tbody>${rowsHTML}</tbody></table>
+      <div class="compare__fail"><div><span class="chip chip--ok">Fixed</span><p>${fixed.length ? fixed.map(esc).join(', ') : 'None'}</p></div><div><span class="chip chip--bad">New</span><p>${added.length ? added.map(esc).join(', ') : 'None'}</p></div>
+      <p class="compare__note">Earlier: "${esc(a.input.prompt.slice(0, 70))}..."<br>Later: "${esc(b.input.prompt.slice(0, 70))}..."</p></div></div>`;
+    $('compare').hidden = false;
+    $('closeCompare').addEventListener('click', () => { $('compare').hidden = true; });
+  }
+
+  function exportCSV() {
+    const cols = ['created_at', 'id', 'mode', 'overall', 'faithfulness', 'hallucination_rate', 'instruction_adherence', 'relevance', 'verdict', 'failures', 'prompt'];
+    const q = (v) => '"' + String(v === null || v === undefined ? '' : v).replace(/"/g, '""') + '"';
+    const lines = [cols.join(',')].concat(runs.all().map((r) => [r.created_at, r.id, r.mode, r.scores.overall, r.scores.faithfulness, r.scores.hallucination_rate, r.scores.instruction_adherence, r.scores.relevance, r.verdict.label, r.failures.map((f) => f.type).join('; '), r.input.prompt].map(q).join(',')));
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/csv' }));
+    a.download = 'latent-lens-history.csv'; a.click();
+    toast('History exported as CSV.');
   }
 
   function inquiries() {
@@ -111,7 +144,15 @@
     $('signOut').addEventListener('click', auth.signOut);
     $('search').addEventListener('input', () => table(runs.all()));
     $('seedBtn').addEventListener('click', () => { window.LLSeed.seed(u.email); render(); toast('Sample runs evaluated and loaded.'); });
-    document.addEventListener('click', (e) => { const d = e.target.closest('[data-del]'); if (d) { runs.remove(d.dataset.del); render(); toast('Run deleted.'); } });
+    document.addEventListener('click', (e) => { const d = e.target.closest('[data-del]'); if (d) { runs.remove(d.dataset.del); picked = picked.filter((x) => x !== d.dataset.del); render(); toast('Run deleted.'); } });
+    document.addEventListener('change', (e) => {
+      const c = e.target.closest('[data-pick]'); if (!c) return;
+      if (c.checked) { picked.push(c.dataset.pick); if (picked.length > 2) { const drop = picked.shift(); const old = document.querySelector(`[data-pick="${drop}"]`); if (old) old.checked = false; } }
+      else picked = picked.filter((x) => x !== c.dataset.pick);
+      $('compareBtn').disabled = picked.length !== 2;
+    });
+    $('compareBtn').addEventListener('click', compare);
+    $('csvBtn').addEventListener('click', exportCSV);
     document.addEventListener('change', (e) => { const s = e.target.closest('[data-inq]'); if (s) { const list = store.get('inquiries', []); list[+s.dataset.inq].status = s.value; store.set('inquiries', list); toast('Status updated.'); } });
     render();
   });
