@@ -329,13 +329,13 @@ failures: 4  remediation: 4</code></div></div><div class="frame__sprockets frame
 <!-- ============ PLANS ============ -->
 <section class="wrap" id="pilot" style="padding-bottom:clamp(90px,12vw,160px)">
   <div class="section-head" style="text-align:center;justify-items:center">
-    <span class="eyebrow">Engagements</span>
+    <span class="eyebrow">Three ways to work with us</span>
     <h2 class="h-lg" data-split>Start free.<br><span class="serif grad">Scale with proof.</span></h2>
   </div>
   <div class="plans" data-stagger>
-    <div class="plan card"><h3>Response Checker</h3><div class="price">Free</div><ul><li>Single prompt / response checks</li><li>Faithfulness, adherence, relevance</li><li>Failure taxonomy + fixes</li><li>History in your dashboard</li></ul><a class="btn btn--ghost" href="checker.html">Open checker</a></div>
-    <div class="plan card plan--hot"><h3>Quality Audit</h3><div class="price">Fixed fee <small>/ audit</small></div><ul><li>Your real traffic sample (200-2,000 rows)</li><li>Custom rubric + human-labeled calibration set</li><li>Failure heatmap by intent and model</li><li>Written remediation plan</li></ul><a class="btn btn--primary" href="#inquiry">Request an audit</a></div>
-    <div class="plan card"><h3>Custom Pilot</h3><div class="price">Scoped <small>/ 4-6 wks</small></div><ul><li>Evaluation suite wired into your CI</li><li>RAG + agent trace evaluation (scoped per pilot)</li><li>Regression gates per release</li><li>Private deployment option</li></ul><a class="btn btn--ghost" href="#inquiry">Discuss a pilot</a></div>
+    <div class="plan card"><span class="plan__kind">Automated evaluation</span><h3>Free Checker</h3><div class="price">Free</div><p class="plan__desc">Check individual AI responses and get scores, identified failures, explanations and recommendations in seconds.</p><ul><li>Scores for faithfulness, adherence, relevance</li><li>Failures classified, with explanations</li><li>Recommended fixes for every issue</li><li>History in your dashboard</li></ul><a class="btn btn--ghost" href="checker.html">Open the checker</a></div>
+    <div class="plan card plan--hot"><span class="plan__kind">Human-led AI evaluation</span><h3>Quality Audits</h3><div class="price">Fixed fee <small>/ audit</small></div><p class="plan__desc">Our evaluation experts assess your AI outputs against defined quality criteria. The core of the audit is expert human judgement.</p><ul><li>Findings validated by evaluation experts</li><li>Errors classified, failure patterns analysed</li><li>Detailed evaluation report with priorities</li><li>NDA available on request</li></ul><a class="btn btn--primary" href="#inquiry">Request an audit</a></div>
+    <div class="plan card"><span class="plan__kind">Evaluation system for your business</span><h3>Custom Pilots</h3><div class="price">Scoped <small>/ per project</small></div><p class="plan__desc">We test your specific AI application or workflow against requirements tailored to your business.</p><ul><li>Your datasets and multiple test scenarios</li><li>Automated evaluation pipelines and integrations</li><li>Ongoing testing as your AI changes</li><li>Human evaluation where it is needed, NDA on request</li></ul><a class="btn btn--ghost" href="#inquiry">Discuss a pilot</a></div>
   </div>
 </section>
 
@@ -359,6 +359,7 @@ failures: 4  remediation: 4</code></div></div><div class="frame__sprockets frame
         <label><input type="radio" name="type" value="RAG evaluation"><span>RAG evaluation</span></label>
         <label><input type="radio" name="type" value="Agent evaluation"><span>Agent evaluation</span></label></div></div>
       <div class="field field--full"><label for="iq-msg">Use case</label><textarea class="textarea" id="iq-msg" name="message" required placeholder="e.g. Support assistant on GPT-4o with a RAG layer over 3k help articles. We see wrong refund terms in roughly 1 in 20 answers."></textarea></div>
+      <div class="field field--full"><label class="nda"><input type="checkbox" name="nda" value="yes"> <span>We need an NDA before sharing any data or outputs</span></label></div>
       <div class="form__foot"><span class="form__note">We reply within one business day.</span><button class="btn btn--primary" type="submit">Send request <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button></div>
       <div class="success" id="inquiryOk" role="status"></div>
     </form>

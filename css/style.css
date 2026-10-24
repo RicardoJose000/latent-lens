@@ -319,7 +319,7 @@ pre.json .k { color: var(--violet); } pre.json .s { color: #86efac; } pre.json .
 .plan { padding: 30px; display: grid; gap: 18px; align-content: start; position: relative; overflow: hidden; transition: transform .5s var(--ease), border-color .4s; }
 .plan:hover { transform: translateY(-6px); border-color: rgba(34,211,238,.3); }
 .plan--hot { border-color: rgba(34,211,238,.35); background: linear-gradient(180deg, rgba(34,211,238,.09), rgba(12,19,36,.7) 40%); }
-.plan--hot::before { content: "Recommended start"; position: absolute; top: 18px; right: 18px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: #031016; background: var(--cyan); padding: 4px 10px; border-radius: 999px; }
+.plan--hot::before { content: "Our core service"; position: absolute; top: 18px; right: 18px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: #031016; background: var(--cyan); padding: 4px 10px; border-radius: 999px; }
 .plan h3 { margin: 0; font-size: 22px; letter-spacing: -.02em; }
 .plan .price { font-size: 40px; letter-spacing: -.04em; font-weight: 600; }
 .plan .price small { font-size: 14px; color: var(--muted); font-weight: 400; letter-spacing: 0; }
@@ -566,3 +566,12 @@ details.judge .inner { display: grid; gap: 12px; padding-top: 14px; }
 .models__list li:hover { color: var(--text); }
 .models__note { font-size: 11px; color: var(--dim); opacity: .8; }
 @media (max-width: 640px) { .models__list { gap: 8px 22px; } }
+
+/* ---------- offers + NDA ---------- */
+.plan__kind { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--cyan); }
+.plan__desc { margin: 0; color: var(--muted); font-size: 14.5px; }
+.nda { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #c7d4e6; }
+.nda input { width: 18px; height: 18px; accent-color: var(--cyan); }
+.nda-sel { display: inline-block; width: auto; margin-left: 6px; padding: 4px 28px 4px 10px; font-size: 12px; border-radius: 999px; background-position: right 10px center; }
+.plan--hot { padding-top: 60px; }
+@media (max-width: 960px) { .plan--hot { padding-top: 60px; } }

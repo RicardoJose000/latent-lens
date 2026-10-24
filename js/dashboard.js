@@ -5,6 +5,8 @@
   const $ = (id) => document.getElementById(id);
   const avg = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : null);
   const STATUS = ['New', 'In review', 'Proposal sent', 'Won', 'Closed'];
+  const NDA = ['NDA requested', 'NDA sent', 'NDA signed'];
+  const ndaState = (q) => (q.nda === 'yes' ? 'NDA requested' : q.nda);
 
   function ago(iso) {
     const s = (Date.now() - new Date(iso)) / 1000;
@@ -111,7 +113,7 @@
       <td class="mono" style="font-size:12.5px">${esc(q.ref)}</td>
       <td>${esc(q.name)}<br><span style="color:var(--dim);font-size:12.5px">${esc(q.email)}</span></td>
       <td>${esc(q.company)}</td>
-      <td><span class="chip chip--info">${esc(q.type)}</span><div class="clip" style="max-width:280px;font-size:13px;margin-top:6px;color:var(--muted)">${esc(q.message)}</div></td>
+      <td><span class="chip chip--info">${esc(q.type)}</span>${q.nda ? ` <select class="select nda-sel" data-nda="${i}" aria-label="NDA status">${NDA.map((n) => `<option${n === ndaState(q) ? ' selected' : ''}>${n}</option>`).join('')}</select>` : ''}<div class="clip" style="max-width:280px;font-size:13px;margin-top:6px;color:var(--muted)">${esc(q.message)}</div></td>
       <td class="mono" style="font-size:12.5px">${esc(q.volume)}</td>
       <td><select class="select" data-inq="${i}" style="padding:8px 34px 8px 12px;font-size:13px">${STATUS.map((s) => `<option${s === q.status ? ' selected' : ''}>${s}</option>`).join('')}</select></td></tr>`).join('')
       : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px">No inquiries yet. Requests from the <a href="index.html#inquiry" style="color:var(--cyan)">website form</a> appear here.</td></tr>';
@@ -153,6 +155,7 @@
     });
     $('compareBtn').addEventListener('click', compare);
     $('csvBtn').addEventListener('click', exportCSV);
+    document.addEventListener('change', (e) => { const n = e.target.closest('[data-nda]'); if (n) { const list = store.get('inquiries', []); list[+n.dataset.nda].nda = n.value; store.set('inquiries', list); toast('NDA status updated.'); } });
     document.addEventListener('change', (e) => { const s = e.target.closest('[data-inq]'); if (s) { const list = store.get('inquiries', []); list[+s.dataset.inq].status = s.value; store.set('inquiries', list); toast('Status updated.'); } });
     render();
   });
